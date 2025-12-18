@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-   
     @Override
     public User getUserById(Long id) {
 
@@ -37,7 +36,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found with id " + id));
     }
-
     
     @Override
     public User getUserByEmail(String email) {
