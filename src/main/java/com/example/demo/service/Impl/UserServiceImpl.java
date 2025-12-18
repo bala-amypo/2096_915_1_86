@@ -1,41 +1,49 @@
-package com.example.demo.serviceImpl;
+package com.example.demo.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.service.UserService;
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
+   
     @Override
     public User registerUser(User user) {
 
-        if (userRepo.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists!");
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            throw new BadRequestException("Email already exists");
         }
 
-        user.setPassword(encoder.encode(user.getPassword()));
-
-        if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("USER");
-        }
-
-        return userRepo.save(user);
+        return userRepository.save(user);
     }
 
+   
     @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    public User getUserById(Long id) {
+
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with id " + id));
+    }
+
+    
+    @Override
+    public User getUserByEmail(String email) {
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with email " + email));
     }
 }
