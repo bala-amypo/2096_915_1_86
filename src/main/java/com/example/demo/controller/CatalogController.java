@@ -6,8 +6,6 @@ import com.example.demo.entity.Crop;
 import com.example.demo.entity.Fertilizer;
 import com.example.demo.service.CatalogService;
 import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/catalog")
 public class CatalogController {
+
     private final CatalogService catalogService;
 
     public CatalogController(CatalogService catalogService) {
@@ -22,11 +21,7 @@ public class CatalogController {
     }
 
     @PostMapping("/crop")
-    public ResponseEntity<?> addCrop(@RequestBody CropRequest req, Authentication auth) {
-        boolean isAdmin = auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(r -> r.equals("ROLE_ADMIN"));
-        if (!isAdmin) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    public ResponseEntity<?> addCrop(@RequestBody CropRequest req) {
 
         Crop crop = Crop.builder()
                 .name(req.getName())
@@ -35,28 +30,27 @@ public class CatalogController {
                 .requiredWater(req.getRequiredWater())
                 .season(req.getSeason())
                 .build();
-        return ResponseEntity.ok(catalogService.addCrop(crop));
+
+        return ResponseEntity.status(201).body(catalogService.addCrop(crop));
     }
 
     @PostMapping("/fertilizer")
-    public ResponseEntity<?> addFertilizer(@RequestBody FertilizerRequest req, Authentication auth) {
-        boolean isAdmin = auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(r -> r.equals("ROLE_ADMIN"));
-        if (!isAdmin) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    public ResponseEntity<?> addFertilizer(@RequestBody FertilizerRequest req) {
 
         Fertilizer fert = Fertilizer.builder()
                 .name(req.getName())
                 .npkRatio(req.getNpkRatio())
                 .recommendedForCrops(req.getRecommendedForCrops())
                 .build();
-        return ResponseEntity.ok(catalogService.addFertilizer(fert));
+
+        return ResponseEntity.status(201).body(catalogService.addFertilizer(fert));
     }
 
     @GetMapping("/crops/suitable")
     public ResponseEntity<List<Crop>> findCrops(@RequestParam Double ph,
                                                 @RequestParam Double water,
                                                 @RequestParam String season) {
+
         return ResponseEntity.ok(catalogService.findSuitableCrops(ph, water, season));
     }
 

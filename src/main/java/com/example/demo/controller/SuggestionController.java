@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/suggestions")
 public class SuggestionController {
+
     private final SuggestionService suggestionService;
 
     public SuggestionController(SuggestionService suggestionService) {
@@ -18,7 +19,8 @@ public class SuggestionController {
 
     @PostMapping("/{farmId}")
     public ResponseEntity<Suggestion> generate(@PathVariable Long farmId) {
-        return ResponseEntity.ok(suggestionService.generateSuggestion(farmId));
+        return ResponseEntity.status(201)
+                .body(suggestionService.generateSuggestion(farmId));
     }
 
     @GetMapping("/{suggestionId}")
