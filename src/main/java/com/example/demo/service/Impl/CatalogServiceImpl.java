@@ -6,6 +6,7 @@ import com.example.demo.repository.*;
 import com.example.demo.service.CatalogService;
 import com.example.demo.util.ValidationUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogServiceImpl implements CatalogService {
@@ -38,13 +39,20 @@ public class CatalogServiceImpl implements CatalogService {
         return fertRepo.save(f);
     }
 
+  
     @Override
-    public List<Crop> findSuitableCrops(double ph, double water, String season) {
+    public List<Crop> findSuitableCrops(
+            Double ph, Double water, String season) {
+
         return cropRepo.findSuitableCrops(ph, season);
     }
 
     @Override
     public List<Fertilizer> findFertilizersForCrops(List<String> crops) {
-        return fertRepo.findByCropName(crops.get(0));
+        List<Fertilizer> list = new ArrayList<>();
+        for (String c : crops) {
+            list.addAll(fertRepo.findByCropName(c));
+        }
+        return list;
     }
 }

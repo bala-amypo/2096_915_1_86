@@ -13,34 +13,51 @@ public class SuggestionServiceImpl implements SuggestionService {
     private final CatalogService catalogService;
     private final SuggestionRepository repo;
 
-    public SuggestionServiceImpl(FarmService fs,
-                                 CatalogService cs,
+    public SuggestionServiceImpl(FarmService farmService,
+                                 CatalogService catalogService,
                                  SuggestionRepository repo) {
-        this.farmService = fs;
-        this.catalogService = cs;
+        this.farmService = farmService;
+        this.catalogService = catalogService;
         this.repo = repo;
     }
 
     @Override
     public Suggestion generateSuggestion(Long farmId) {
         Farm farm = farmService.getFarmById(farmId);
-        List<Crop> crops =
-                catalogService.findSuitableCrops(
-                        farm.getSoilPH(),
-                        farm.getWaterLevel(),
-                        farm.getSeason());
+
+        List<Crop> crops = catalogService.findSuitableCrops(
+                farm.getSoilPH(),
+                farm.getWaterLevel(),
+                farm.getSeason());
 
         List<Fertilizer> ferts =
                 catalogService.findFertilizersForCrops(
-                        crops.stream().map(Crop::getName).collect(Collectors.toList()));
+                        crops.stream()
+                                .map(Crop::getName)
+                                .collect(Collectors.toList()));
 
         Suggestion s = new Suggestion();
         s.setFarm(farm);
         s.setSuggestedCrops(
-                crops.stream().map(Crop::getName).collect(Collectors.joining(",")));
+                crops.stream()
+                        .map(Crop::getName)
+                        .collect(Collectors.joining(",")));
         s.setSuggestedFertilizers(
-                ferts.stream().map(Fertilizer::getName).collect(Collectors.joining(",")));
+                ferts.stream()
+                        .map(Fertilizer::getName)
+                        .collect(Collectors.joining(",")));
 
         return repo.save(s);
+    }
+
+
+    @Override
+    public List<Suggestion> getSuggestionsByFarm(Long farmId) {
+        return repo.findByFarmId(farmId);
+    }
+
+    @Override
+    public Suggestion getSuggestion(Long id) {
+        return repo.findById(id).orElseThrow();
     }
 }
