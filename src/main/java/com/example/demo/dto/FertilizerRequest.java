@@ -1,13 +1,27 @@
-// src/main/java/com/example/demo/dto/FertilizerRequest.java
 package com.example.demo.dto;
 
 import lombok.*;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FertilizerRequest {
+public class RegisterRequest {
     private String name;
-    private String npkRatio;
-    private String recommendedForCrops;
+    private String email;
+    private String password;
+}
+package com.example.demo.dto;
+
+import lombok.*;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class FarmRequest {
+    private String name;
+    private Double soilPH;
+    private Double waterLevel;
+    private String season;
 }
