@@ -6,6 +6,8 @@ import com.example.demo.repository.FarmRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FarmService;
 
+import java.util.List;
+
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepo;
@@ -29,5 +31,11 @@ public class FarmServiceImpl implements FarmService {
     public Farm getFarmById(Long id) {
         return farmRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm not found"));
+    }
+
+    
+    @Override
+    public List<Farm> getFarmsByOwner(Long ownerId) {
+        return farmRepo.findByOwnerId(ownerId);
     }
 }
