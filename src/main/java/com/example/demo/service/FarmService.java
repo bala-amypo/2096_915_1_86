@@ -1,21 +1,12 @@
+
 package com.example.demo.service;
 
-import com.example.demo.entity.Suggestion;
+import com.example.demo.entity.Farm;
 import java.util.List;
 
-public interface SuggestionService {
-    Suggestion generateSuggestion(Long farmId);
-    Suggestion getSuggestion(Long id);
-    List<Suggestion> getSuggestionsByFarm(Long farmId);
+public interface FarmService {
+    Farm createFarm(Farm farm, Long ownerId);
+    Farm getFarmById(Long id);
+    List<Farm> getFarmsByOwner(Long ownerId);
 }
-package com.example.demo.service;
 
-import com.example.demo.entity.*;
-import java.util.List;
-
-public interface CatalogService {
-    Crop addCrop(Crop crop);
-    Fertilizer addFertilizer(Fertilizer fertilizer);
-    List<Crop> findSuitableCrops(Double ph, Double water, String season);
-    List<Fertilizer> findFertilizersForCrops(List<String> crops);
-}
