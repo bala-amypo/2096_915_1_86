@@ -1,3 +1,14 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.FarmRequest;
+import com.example.demo.entity.Farm;
+import com.example.demo.service.*;
+import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/farms")
 public class FarmController {
@@ -5,9 +16,9 @@ public class FarmController {
     private final FarmService farmService;
     private final UserService userService;
 
-    public FarmController(FarmService f, UserService u) {
-        this.farmService = f;
-        this.userService = u;
+    public FarmController(FarmService farmService, UserService userService) {
+        this.farmService = farmService;
+        this.userService = userService;
     }
 
     @PostMapping

@@ -1,11 +1,23 @@
+
+package com.example.demo.controller;
+
+import com.example.demo.dto.*;
+import com.example.demo.entity.*;
+import com.example.demo.service.CatalogService;
+import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/catalog")
 public class CatalogController {
 
     private final CatalogService catalogService;
 
-    public CatalogController(CatalogService c) {
-        this.catalogService = c;
+    public CatalogController(CatalogService catalogService) {
+        this.catalogService = catalogService;
     }
 
     @PostMapping("/crop")
@@ -53,6 +65,7 @@ public class CatalogController {
     @GetMapping("/crops")
     public ResponseEntity<List<Crop>> findCrops(
             Double ph, Double water, String season) {
+
         return ResponseEntity.ok(
                 catalogService.findSuitableCrops(ph, water, season));
     }
