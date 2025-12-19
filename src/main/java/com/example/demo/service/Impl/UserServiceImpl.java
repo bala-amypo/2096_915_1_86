@@ -17,9 +17,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-   
     @Override
-    public User registerUser(User user) {
+    public User register(User user) {
 
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found with id " + id));
     }
-    
+
     @Override
     public User getUserByEmail(String email) {
 
