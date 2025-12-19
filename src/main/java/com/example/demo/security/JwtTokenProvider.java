@@ -1,13 +1,13 @@
-
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
 import java.util.Date;
 
 public class JwtTokenProvider {
 
     private final String SECRET_KEY = "secret-key-demo";
-    private final long EXPIRATION = 3600000; // 1 hour
+    private final long EXPIRATION = 3600000;
 
     public String createToken(Long userId, String email, String role) {
         return Jwts.builder()
@@ -21,31 +21,26 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token);
+        Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
         return true;
     }
 
     public Long getUserId(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+        return Jwts.parser().setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", Long.class);
     }
 
     public String getEmail(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+        return Jwts.parser().setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .get("email", String.class);
     }
 
     public String getRole(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+        return Jwts.parser().setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role", String.class);
