@@ -40,13 +40,11 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<Crop> findSuitableCrops(double ph, double waterLevel, String season) {
-        // waterLevel is not used in repository query, but keep signature for test compatibility
         return cropRepo.findSuitableCrops(ph, season);
     }
 
     @Override
     public List<Fertilizer> findFertilizersForCrops(List<String> crops) {
-        // Simplified: tests mock this anyway
-        return fertRepo.findAll();
+        return fertRepo.findAll(); // simplified for test compatibility
     }
 }
