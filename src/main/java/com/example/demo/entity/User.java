@@ -1,8 +1,3 @@
-package com.example.demo.entity;
-
-import jakarta.persistence.*;
-import lombok.*;
-
 @Entity
 @Data
 @Builder
@@ -17,9 +12,12 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
-    private String password; // stored as BCrypt hash
+    @Column(unique = true, nullable = false)
+    private String email;   // <-- added
 
     @Column(nullable = false)
-    private String role; // e.g. "USER", "ADMIN"
+    private String password;
+
+    @Column(nullable = false)
+    private String role;
 }
