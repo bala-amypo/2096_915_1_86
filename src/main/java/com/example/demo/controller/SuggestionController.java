@@ -1,35 +1,20 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.Suggestion;
-import com.example.demo.service.SuggestionService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 @RestController
 @RequestMapping("/suggestions")
 public class SuggestionController {
 
-    private final SuggestionService suggestionService;
+    private final SuggestionService service;
 
-    public SuggestionController(SuggestionService suggestionService) {
-        this.suggestionService = suggestionService;
+    public SuggestionController(SuggestionService s) {
+        this.service = s;
     }
 
     @PostMapping("/{farmId}")
     public ResponseEntity<Suggestion> generate(@PathVariable Long farmId) {
-        return ResponseEntity.status(201)
-                .body(suggestionService.generateSuggestion(farmId));
+        return ResponseEntity.ok(service.generateSuggestion(farmId));
     }
 
-    @GetMapping("/{suggestionId}")
-    public ResponseEntity<Suggestion> getSuggestion(@PathVariable Long suggestionId) {
-        return ResponseEntity.ok(suggestionService.getSuggestion(suggestionId));
-    }
-
-    @GetMapping("/farm/{farmId}")
-    public ResponseEntity<List<Suggestion>> getSuggestionsByFarm(@PathVariable Long farmId) {
-        return ResponseEntity.ok(suggestionService.getSuggestionsByFarm(farmId));
+    @GetMapping("/{id}")
+    public ResponseEntity<Suggestion> getSuggestion(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getSuggestion(id));
     }
 }
