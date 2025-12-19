@@ -1,7 +1,9 @@
-// src/main/java/com/example/demo/entity/Fertilizer.java
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
@@ -10,11 +12,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Fertilizer {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Fertilizer name
     private String name;
+
+    // NPK ratio in format "N-P-K"
     private String npkRatio;
-    // Comma-separated crop names (e.g., "Wheat,Rice")
+
+    // Recommended crops (simple string list, could be comma-separated)
     private String recommendedForCrops;
 }
