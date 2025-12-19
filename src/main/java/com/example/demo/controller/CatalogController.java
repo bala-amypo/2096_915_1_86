@@ -1,53 +1,56 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CropRequest;
+import com.example.demo.dto.FertilizerRequest;
 import com.example.demo.entity.Crop;
 import com.example.demo.entity.Fertilizer;
 import com.example.demo.service.CatalogService;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/catalog")
 public class CatalogController {
-
-    private CatalogService catalogService;
+    private final CatalogService catalogService;
 
     public CatalogController(CatalogService catalogService) {
         this.catalogService = catalogService;
     }
 
-    // ADD CROP
-    @PostMapping("/crop")
-    public ResponseEntity<Crop> addCrop(@RequestBody Crop crop) {
-        Crop saved = catalogService.addCrop(crop);
+    public ResponseEntity<Crop> addCrop(CropRequest req, Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            return ResponseEntity.status(403).build();
+        }
+        Crop c = Crop.builder()
+                .name(req.getName())
+                .suitablePHMin(req.getSuitablePHMin())
+                .suitablePHMax(req.getSuitablePHMax())
+                .requiredWater(req.getRequiredWater())
+                .season(req.getSeason())
+                .build();
+        Crop saved = catalogService.addCrop(c);
         return ResponseEntity.ok(saved);
     }
 
-    // ADD FERTILIZER
-    @PostMapping("/fertilizer")
-    public ResponseEntity<Fertilizer> addFertilizer(@RequestBody Fertilizer fertilizer) {
-        Fertilizer saved = catalogService.addFertilizer(fertilizer);
+    public ResponseEntity<Fertilizer> addFertilizer(FertilizerRequest req, Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            return ResponseEntity.status(403).build();
+        }
+        Fertilizer f = Fertilizer.builder()
+                .name(req.getName())
+                .npkRatio(req.getNpkRatio())
+                .recommendedForCrops(req.getRecommendedForCrops())
+                .build();
+        Fertilizer saved = catalogService.addFertilizer(f);
         return ResponseEntity.ok(saved);
     }
 
-    // GET SUITABLE CROPS
-    @GetMapping("/crops")
-    public ResponseEntity<List<Crop>> getSuitableCrops(
-            @RequestParam double ph,
-            @RequestParam String season) {
-
-        List<Crop> crops = catalogService.findSuitableCrops(ph, season);
-        return ResponseEntity.ok(crops);
+    public ResponseEntity<List<Crop>> findCrops(double ph, double water, String season) {
+        return ResponseEntity.ok(catalogService.findSuitableCrops(ph, water, season));
     }
 
-    // GET SUITABLE FERTILIZERS
-    @PostMapping("/fertilizers")
-    public ResponseEntity<List<Fertilizer>> getFertilizers(@RequestBody List<String> cropNames) {
-
-        List<Fertilizer> fertilizers = catalogService.findFertilizersForCrops(cropNames);
-        return ResponseEntity.ok(fertilizers);
+    public ResponseEntity<List<Fertilizer>> findFerts(String crop) {
+        return ResponseEntity.ok(catalogService.findFertilizersForCrops(List.of(crop)));
     }
 }
