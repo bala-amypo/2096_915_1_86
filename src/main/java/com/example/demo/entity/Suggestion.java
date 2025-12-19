@@ -1,29 +1,30 @@
-// src/main/java/com/example/demo/entity/Suggestion.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "suggestions")
 public class Suggestion {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String suggestedCrops;        // Comma-separated names
-    private String suggestedFertilizers;  // Comma-separated names
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 
+    private String suggestedCrops;
+    private String suggestedFertilizers;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Explicitly callable and also usable as JPA lifecycle callback
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

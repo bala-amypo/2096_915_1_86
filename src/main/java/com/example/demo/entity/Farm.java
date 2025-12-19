@@ -1,9 +1,8 @@
-// src/main/java/com/example/demo/entity/Farm.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
-
 
 @Data
 @Builder
@@ -12,14 +11,16 @@ import lombok.*;
 @Entity
 @Table(name = "farms")
 public class Farm {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    @NotBlank @Size(max = 100)
+    @NotBlank
+    @Size(max = 100)
     private String name;
 
     @NotNull

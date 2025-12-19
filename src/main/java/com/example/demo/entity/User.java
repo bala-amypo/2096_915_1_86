@@ -1,23 +1,33 @@
-@Entity
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @NotBlank
+    @Size(max = 100)
+    private String name;
 
-    @Column(unique = true, nullable = false)
-    private String email;   // <-- added
+    @Email
+    @NotBlank
+    @Column(unique = true)
+    private String email;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Size(min = 6)
     private String password;
 
-    @Column(nullable = false)
-    private String role;
+    @NotBlank
+    private String role = "USER";
 }

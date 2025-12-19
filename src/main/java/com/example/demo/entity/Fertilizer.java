@@ -1,27 +1,28 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "fertilizers")
 public class Fertilizer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Fertilizer name
+    @NotBlank
+    @Size(max = 100)
     private String name;
 
-    // NPK ratio in format "N-P-K"
+    @NotBlank
     private String npkRatio;
 
-    // Recommended crops (simple string list, could be comma-separated)
+    @NotBlank
+    @Size(max = 500)
     private String recommendedForCrops;
 }
