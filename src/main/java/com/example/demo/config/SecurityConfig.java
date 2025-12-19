@@ -19,13 +19,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Expose AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-    // Security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -40,9 +38,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Correct DaoAuthenticationProvider constructor
+    // Correct usage: constructor takes only UserDetailsService
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        return new DaoAuthenticationProvider(userDetailsService, passwordEncoder());
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder()); // still available
+        return provider;
     }
 }
