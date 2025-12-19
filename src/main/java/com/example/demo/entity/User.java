@@ -1,33 +1,30 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
+@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
-public class User {
+public class Suggestion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 100)
-    private String name;
+    @ManyToOne
+    private Farm farm;
 
-    @Email
-    @NotBlank
-    @Column(unique = true)
-    private String email;
+    private String suggestedCrops;
+    private String suggestedFertilizers;
 
-    @NotBlank
-    @Size(min = 6)
-    private String password;
+    private LocalDateTime createdAt;
 
-    @NotBlank
-    private String role = "USER";
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
