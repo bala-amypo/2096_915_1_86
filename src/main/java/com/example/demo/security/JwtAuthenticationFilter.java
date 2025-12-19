@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider provider;
@@ -27,6 +28,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             try {
                 var claims = provider.validateToken(token).getBody();
+                Long userId = claims.get("userId", Long.class);
+                String role = claims.get("role", String.class);
+
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(claims.get("userId"), null,
-                                java.util.List.of(() -> "ROLE_" + claims.get("
+                        new UsernamePasswordAuthenticationToken(
+                                userId,
+                                null,
+                                List.of(() -> "ROLE_" + role)
+                        );
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (Exception e) {
+                SecurityContextHolder.clearContext();
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}
