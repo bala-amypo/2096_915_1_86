@@ -1,10 +1,10 @@
+
+// src/main/java/com/example/demo/service/SuggestionService.java
 package com.example.demo.service;
 
 import com.example.demo.entity.Suggestion;
 
 public interface SuggestionService {
-
     Suggestion generateSuggestion(Long farmId);
-
-    Suggestion getSuggestion(Long suggestionId);
+    Suggestion getSuggestion(Long id);
 }
