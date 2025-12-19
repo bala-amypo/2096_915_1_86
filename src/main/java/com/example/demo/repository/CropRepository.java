@@ -1,14 +1,20 @@
+public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
+    List<Suggestion> findByFarmId(Long farmId);
+}
+public interface FertilizerRepository extends JpaRepository<Fertilizer, Long> {
+    List<Fertilizer> findByCropName(String cropName);
+}
+
+public interface FarmRepository extends JpaRepository<Farm, Long> {
+    List<Farm> findByOwnerId(Long ownerId);
+}
 
 
 
-package com.example.demo.repository;
-
-import com.example.demo.entity.Crop;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import java.util.List;
-
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
+}
 public interface CropRepository extends JpaRepository<Crop, Long> {
-    @Query("SELECT c FROM Crop c WHERE :ph BETWEEN c.suitablePHMin AND c.suitablePHMax AND c.requiredWater <= :water AND c.season = :season")
-    List<Crop> findSuitableCrops(@Param("ph") Double ph, @Param("water") Double water, @Param("season") String season);
+    List<Crop> findSuitableCrops(Double ph, String season);
 }
