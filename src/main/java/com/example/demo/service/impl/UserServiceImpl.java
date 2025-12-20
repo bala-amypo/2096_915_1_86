@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repo;
     private final PasswordEncoder encoder;
 
-    // ✅ Constructor must match test expectations
+    // Constructor required by tests
     public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
         this.repo = repo;
         this.encoder = encoder;
@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Email already exists");
         }
         user.setPassword(encoder.encode(user.getPassword()));
+        if (user.getRole() == null) user.setRole("USER");
         return repo.save(user);
     }
 

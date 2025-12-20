@@ -6,18 +6,17 @@ import com.example.demo.service.CatalogService;
 import com.example.demo.service.FarmService;
 import com.example.demo.service.SuggestionService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class SuggestionServiceImpl implements SuggestionService {
     private final FarmService farmService;
     private final CatalogService catalogService;
     private final SuggestionRepository suggestionRepo;
 
+    // Constructor required by tests
     public SuggestionServiceImpl(FarmService farmService,
                                  CatalogService catalogService,
                                  SuggestionRepository suggestionRepo) {

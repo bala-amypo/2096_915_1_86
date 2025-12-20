@@ -7,13 +7,11 @@ import com.example.demo.repository.CropRepository;
 import com.example.demo.repository.FertilizerRepository;
 import com.example.demo.service.CatalogService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
-@Transactional
 public class CatalogServiceImpl implements CatalogService {
     private final CropRepository cropRepo;
     private final FertilizerRepository fertRepo;
@@ -21,6 +19,7 @@ public class CatalogServiceImpl implements CatalogService {
     private static final Set<String> VALID_SEASONS = Set.of("Kharif", "Rabi", "Summer");
     private static final Pattern NPK_PATTERN = Pattern.compile("^\\d+\\-\\d+\\-\\d+$");
 
+    // Constructor required by tests
     public CatalogServiceImpl(CropRepository cropRepo, FertilizerRepository fertRepo) {
         this.cropRepo = cropRepo;
         this.fertRepo = fertRepo;
@@ -48,6 +47,11 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public List<Crop> findSuitableCrops(Double ph, Double waterLevel, String season) {
         return cropRepo.findSuitableCrops(ph, waterLevel, season);
+    }
+
+    @Override
+    public List<Crop> findSuitableCrops(Double ph, String season) {
+        return cropRepo.findSuitableCrops(ph, season);
     }
 
     @Override
