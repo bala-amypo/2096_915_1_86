@@ -10,3 +10,4 @@ public interface UserService {
 
     User findById(Long id);
 }
+
