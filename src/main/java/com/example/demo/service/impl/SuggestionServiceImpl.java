@@ -50,7 +50,6 @@ public class SuggestionServiceImpl implements SuggestionService {
         return repo.save(s);
     }
 
-
     @Override
     public List<Suggestion> getSuggestionsByFarm(Long farmId) {
         return repo.findByFarmId(farmId);
