@@ -6,7 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class Suggestion {
     private Farm farm;
 
     private String suggestedCrops;
+
     private String suggestedFertilizers;
 
     private LocalDateTime createdAt;
@@ -29,4 +31,8 @@ public class Suggestion {
         this.createdAt = LocalDateTime.now();
     }
 }
+
+
+
+
 

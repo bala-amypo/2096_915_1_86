@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +16,8 @@ public class Fertilizer {
     private Long id;
 
     private String name;
+
     private String npkRatio;
+
     private String recommendedForCrops;
 }

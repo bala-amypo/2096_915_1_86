@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,8 +16,12 @@ public class Crop {
     private Long id;
 
     private String name;
+
     private Double suitablePHMin;
+
     private Double suitablePHMax;
+
     private Double requiredWater;
+
     private String season;
 }
