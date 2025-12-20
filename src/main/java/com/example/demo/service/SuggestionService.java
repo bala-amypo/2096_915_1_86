@@ -1,8 +1,5 @@
 package com.example.demo.service;
 
-
-package com.example.demo.service;
-
 import com.example.demo.entity.Suggestion;
 import java.util.List;
 
