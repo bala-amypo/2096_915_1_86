@@ -6,13 +6,14 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository repo;
     private final PasswordEncoder encoder;
 
-    // Constructor required by tests
     public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
         this.repo = repo;
         this.encoder = encoder;
@@ -35,6 +36,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return repo.findById(id).orElseThrow(() -> new BadRequestException("User not found"));
     }
 }

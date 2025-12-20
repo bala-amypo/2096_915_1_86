@@ -1,4 +1,3 @@
-
 package com.example.demo.service;
 
 import com.example.demo.entity.Suggestion;
@@ -9,4 +8,3 @@ public interface SuggestionService {
     Suggestion getSuggestion(Long suggestionId);
     List<Suggestion> getSuggestionsByFarm(Long farmId);
 }
-

@@ -9,15 +9,16 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FarmService;
 import com.example.demo.util.ValidationUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class FarmServiceImpl implements FarmService {
     private final FarmRepository farmRepo;
     private final UserRepository userRepo;
 
-    // Constructor required by tests
     public FarmServiceImpl(FarmRepository farmRepo, UserRepository userRepo) {
         this.farmRepo = farmRepo;
         this.userRepo = userRepo;

@@ -7,11 +7,6 @@ import java.util.List;
 public interface CatalogService {
     Crop addCrop(Crop crop);
     Fertilizer addFertilizer(Fertilizer fertilizer);
-
     List<Crop> findSuitableCrops(Double ph, Double waterLevel, String season);
-
-    // Add this to match tests
-    List<Crop> findSuitableCrops(Double ph, String season);
-
     List<Fertilizer> findFertilizersForCrops(List<String> cropNames);
 }
