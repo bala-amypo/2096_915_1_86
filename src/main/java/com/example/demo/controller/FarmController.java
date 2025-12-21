@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Farm;
-import com.example.demo.entity.User;
-import com.example.demo.repository.FarmRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.FarmService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,36 +11,24 @@ import java.util.List;
 @RequestMapping("/farms")
 public class FarmController {
 
-    private final FarmRepository farmRepository;
-    private final UserRepository userRepository;
+    private final FarmService farmService;
 
-    public FarmController(FarmRepository farmRepository, UserRepository userRepository) {
-        this.farmRepository = farmRepository;
-        this.userRepository = userRepository;
+    public FarmController(FarmService farmService) {
+        this.farmService = farmService;
     }
 
     @PostMapping
     public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
-        String username = auth.getName(); // e.g. "admin"
-        User owner = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        farm.setOwner(owner);
-        return farmRepository.save(farm);
+        return farmService.createFarm(farm, auth.getName()); // ✅ use username
     }
 
     @GetMapping
-    public List<Farm> getAllFarms() {
-        return farmRepository.findAll();
+    public List<Farm> getMyFarms(Authentication auth) {
+        return farmService.getFarmsByOwner(auth.getName()); // ✅ use username
     }
 
     @GetMapping("/{id}")
     public Farm getFarmById(@PathVariable Long id) {
-        return farmRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Farm not found"));
-    }
-
-    @GetMapping("/owner/{ownerId}")
-    public List<Farm> getFarmsByOwner(@PathVariable Long ownerId) {
-        return farmRepository.findByOwnerId(ownerId);
+        return farmService.getFarmById(id);
     }
 }

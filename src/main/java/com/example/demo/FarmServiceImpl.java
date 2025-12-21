@@ -26,12 +26,12 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public Farm createFarm(Farm farm, Long ownerId) {
-        User owner = userRepository.findById(ownerId)
+    public Farm createFarm(Farm farm, String username) {
+        User owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (farm.getSoilPH() < 3.0 || farm.getSoilPH() > 10.0) {
-            throw new IllegalArgumentException("pH");
+            throw new IllegalArgumentException("Soil pH must be between 3.0 and 10.0");
         }
 
         if (!ValidationUtil.validSeason(farm.getSeason())) {
@@ -43,8 +43,10 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(Long ownerId) {
-        return farmRepository.findByOwnerId(ownerId);
+    public List<Farm> getFarmsByOwner(String username) {
+        User owner = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return farmRepository.findByOwnerId(owner.getId());
     }
 
     @Override
