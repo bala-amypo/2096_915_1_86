@@ -46,7 +46,7 @@ public class SecurityConfig {
                                  "/login/suggestions/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.disable()) // disable default login page
+            .formLogin(form -> form.disable())
             .logout(logout -> logout.logoutSuccessUrl("/public/logout-success"));
         return http.build();
     }
