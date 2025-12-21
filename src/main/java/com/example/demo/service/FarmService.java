@@ -5,9 +5,12 @@ import java.util.List;
 
 public interface FarmService {
 
-    Farm createFarm(Farm farm, Long ownerId);
+    // Create a farm for the logged-in user
+    Farm createFarm(Farm farm, String username);
 
-    List<Farm> getFarmsByOwner(Long ownerId);
+    // Get all farms owned by the logged-in user
+    List<Farm> getFarmsByOwner(String username);
 
+    // Get a farm by its ID
     Farm getFarmById(Long farmId);
 }
