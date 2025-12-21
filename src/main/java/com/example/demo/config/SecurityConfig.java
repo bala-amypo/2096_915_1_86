@@ -19,7 +19,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-  
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         UserDetails admin = User.builder()
@@ -37,16 +36,17 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, user);
     }
 
-    // Basic security rules
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**").permitAll()   // open endpoints
-                .anyRequest().authenticated()               // everything else requires login
+                .requestMatchers("/public/**",
+                                 "/suggestions/**",
+                                 "/login/suggestions/**").permitAll()
+                .anyRequest().authenticated()
             )
-            .formLogin(form -> form.defaultSuccessUrl("/home", true)) // redirect after login
+            .formLogin(form -> form.disable()) // disable default login page
             .logout(logout -> logout.logoutSuccessUrl("/public/logout-success"));
         return http.build();
     }
