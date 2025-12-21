@@ -7,6 +7,8 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/farms")
 public class FarmController {
@@ -19,6 +21,7 @@ public class FarmController {
         this.userRepository = userRepository;
     }
 
+  
     @PostMapping
     public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
         String username = auth.getName(); // e.g. "admin"
@@ -26,5 +29,24 @@ public class FarmController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         farm.setOwner(owner);
         return farmRepository.save(farm);
+    }
+
+    
+    @GetMapping
+    public List<Farm> getAllFarms() {
+        return farmRepository.findAll();
+    }
+
+    
+    @GetMapping("/{id}")
+    public Farm getFarmById(@PathVariable Long id) {
+        return farmRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Farm not found"));
+    }
+
+    
+    @GetMapping("/owner/{ownerId}")
+    public List<Farm> getFarmsByOwner(@PathVariable Long ownerId) {
+        return farmRepository.findByOwnerId(ownerId);
     }
 }
