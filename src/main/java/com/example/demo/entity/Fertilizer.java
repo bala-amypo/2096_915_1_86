@@ -20,4 +20,7 @@ public class Fertilizer {
     private String npkRatio;
 
     private String recommendedForCrops;
+
+   
+    private String cropName;
 }
