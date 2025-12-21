@@ -4,18 +4,21 @@ import com.example.demo.entity.Crop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface CropRepository extends JpaRepository<Crop, Long> {
 
     // 3-argument version used in SuggestionService
-    @Query("SELECT c FROM Crop c WHERE :ph BETWEEN c.suitablePHMin AND c.suitablePHMax AND c.requiredWater <= :water AND c.season = :season")
+    @Query("SELECT c FROM Crop c WHERE :ph BETWEEN c.suitablePHMin AND c.suitablePHMax " +
+           "AND c.requiredWater <= :water AND c.season = :season")
     List<Crop> findSuitableCrops(@Param("ph") Double ph,
                                  @Param("water") Double water,
                                  @Param("season") String season);
 
     // 2-argument version used in tests
-    @Query("SELECT c FROM Crop c WHERE :ph BETWEEN c.suitablePHMin AND c.suitablePHMax AND c.season = :season")
+    @Query("SELECT c FROM Crop c WHERE :ph BETWEEN c.suitablePHMin AND c.suitablePHMax " +
+           "AND c.season = :season")
     List<Crop> findSuitableCrops(@Param("ph") Double ph,
                                  @Param("season") String season);
 }
