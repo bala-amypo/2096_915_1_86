@@ -5,12 +5,8 @@ import com.example.demo.entity.Fertilizer;
 import java.util.List;
 
 public interface CatalogService {
-
     Crop addCrop(Crop crop);
-
     Fertilizer addFertilizer(Fertilizer fertilizer);
-
     List<Crop> findSuitableCrops(Double ph, Double waterLevel, String season);
-
     List<Fertilizer> findFertilizersForCrops(List<String> cropNames);
 }
