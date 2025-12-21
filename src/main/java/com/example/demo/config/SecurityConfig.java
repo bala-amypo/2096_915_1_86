@@ -19,7 +19,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Load users from DB
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
@@ -38,10 +37,17 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**", "/auth/**", "/h2-console/**").permitAll()
+                .requestMatchers(
+                    "/public/**",
+                    "/auth/**",
+                    "/h2-console/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/v3/api-docs.yaml"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
-            .headers(h -> h.frameOptions(f -> f.sameOrigin())) // allow H2 console
+            .headers(h -> h.frameOptions(f -> f.sameOrigin()))
             .formLogin(form -> form.defaultSuccessUrl("/auth/me", true))
             .logout(logout -> logout.logoutSuccessUrl("/public/logout-success"));
 
