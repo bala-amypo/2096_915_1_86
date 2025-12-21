@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/suggestions")
 public class SuggestionController {
 
     private final SuggestionService suggestionService;
@@ -16,18 +16,13 @@ public class SuggestionController {
         this.suggestionService = suggestionService;
     }
 
-    @PostMapping({"/suggestions/{farmId}", "/login/suggestions/{farmId}"})
+    @PostMapping("/{farmId}")
     public Suggestion generate(@PathVariable Long farmId) {
-        return suggestionService.generateSuggestion(farmId);
+        return suggestionService.generateForFarm(farmId);
     }
 
-    @GetMapping("/suggestions/{suggestionId}")
-    public Suggestion getSuggestion(@PathVariable Long suggestionId) {
-        return suggestionService.getSuggestion(suggestionId);
-    }
-
-    @GetMapping("/suggestions/farm/{farmId}")
-    public List<Suggestion> getByFarm(@PathVariable Long farmId) {
-        return suggestionService.getSuggestionsByFarm(farmId);
+    @GetMapping("/farm/{farmId}")
+    public List<Suggestion> list(@PathVariable Long farmId) {
+        return suggestionService.listForFarm(farmId);
     }
 }

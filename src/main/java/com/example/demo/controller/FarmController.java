@@ -19,16 +19,16 @@ public class FarmController {
 
     @PostMapping
     public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
-        return farmService.createFarm(farm, auth.getName()); // ✅ use username
+        return farmService.createFarm(farm, auth.getName());
     }
 
     @GetMapping
-    public List<Farm> getMyFarms(Authentication auth) {
-        return farmService.getFarmsByOwner(auth.getName()); // ✅ use username
+    public List<Farm> myFarms(Authentication auth) {
+        return farmService.getFarmsByOwner(auth.getName());
     }
 
     @GetMapping("/{id}")
-    public Farm getFarmById(@PathVariable Long id) {
+    public Farm getFarm(@PathVariable Long id) {
         return farmService.getFarmById(id);
     }
 }
