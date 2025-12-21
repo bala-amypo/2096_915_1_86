@@ -21,10 +21,7 @@ public class Suggestion {
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 
-    @Column(length = 255)
     private String suggestedCrops;
-
-    @Column(length = 255)
     private String suggestedFertilizers;
 
     @Column(updatable = false)

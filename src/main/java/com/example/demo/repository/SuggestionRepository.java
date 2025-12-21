@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
-
-    // Find all suggestions for a given farm
     List<Suggestion> findByFarm_Id(Long farmId);
 }
