@@ -21,7 +21,6 @@ public class FarmController {
         this.userRepository = userRepository;
     }
 
-  
     @PostMapping
     public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
         String username = auth.getName(); // e.g. "admin"
@@ -31,20 +30,17 @@ public class FarmController {
         return farmRepository.save(farm);
     }
 
-    
     @GetMapping
     public List<Farm> getAllFarms() {
         return farmRepository.findAll();
     }
 
-    
     @GetMapping("/{id}")
     public Farm getFarmById(@PathVariable Long id) {
         return farmRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Farm not found"));
     }
 
-    
     @GetMapping("/owner/{ownerId}")
     public List<Farm> getFarmsByOwner(@PathVariable Long ownerId) {
         return farmRepository.findByOwnerId(ownerId);

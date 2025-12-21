@@ -1,50 +1,35 @@
 package com.example.demo;
 
 import com.example.demo.entity.User;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public User register(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new BadRequestException("Email");
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
+    // Register a new user
+    public User registerUser(String username, String name, String password, String role) {
+        User user = User.builder()
+                .username(username)   
+                .name(name)
+                .password(passwordEncoder.encode(password))
+                .role(role)
+                .build();
         return userRepository.save(user);
     }
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
+    // Find user by username
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)  
                 .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("User"));
     }
 }
