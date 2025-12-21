@@ -36,18 +36,18 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, user);
     }
 
+    // Basic security rules
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**",
-                                 "/suggestions/**",
-                                 "/login/suggestions/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/public/**").permitAll()   // open endpoints
+                .anyRequest().authenticated()               // everything else requires login
             )
-            .formLogin(form -> form.disable())
-            .httpBasic(basic -> basic.disable());
+            .formLogin(form -> form.defaultSuccessUrl("/home", true)) // redirect after login
+            .logout(logout -> logout.logoutSuccessUrl("/public/logout-success"));
+
         return http.build();
     }
 }
