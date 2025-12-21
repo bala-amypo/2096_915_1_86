@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "farms")
 @Getter
 @Setter
 @Builder
@@ -24,5 +25,6 @@ public class Farm {
     private String season;
 
     @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 }

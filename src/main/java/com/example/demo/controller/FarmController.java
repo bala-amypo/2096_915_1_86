@@ -1,44 +1,30 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.FarmRequest;
 import com.example.demo.entity.Farm;
-import com.example.demo.service.FarmService;
-import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.entity.User;
+import com.example.demo.repository.FarmRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/farms")
 public class FarmController {
 
-    private final FarmService farmService;
-    private final UserService userService;
+    private final FarmRepository farmRepository;
+    private final UserRepository userRepository;
 
-    public FarmController(FarmService farmService,
-                          UserService userService) {
-        this.farmService = farmService;
-        this.userService = userService;
+    public FarmController(FarmRepository farmRepository, UserRepository userRepository) {
+        this.farmRepository = farmRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping
-    public ResponseEntity<Farm> createFarm(@RequestBody FarmRequest req,
-                                           Authentication auth) {
-        Long userId = (Long) auth.getPrincipal();
-        Farm f = Farm.builder()
-                .name(req.getName())
-                .soilPH(req.getSoilPH())
-                .waterLevel(req.getWaterLevel())
-                .season(req.getSeason())
-                .build();
-        return ResponseEntity.ok(farmService.createFarm(f, userId));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Farm>> listFarms(Authentication auth) {
-        Long userId = (Long) auth.getPrincipal();
-        return ResponseEntity.ok(farmService.getFarmsByOwner(userId));
+    public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
+        String username = auth.getName(); // e.g. "admin"
+        User owner = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        farm.setOwner(owner);
+        return farmRepository.save(farm);
     }
 }
