@@ -26,5 +26,5 @@ public class Farm {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    private User owner; 
 }
