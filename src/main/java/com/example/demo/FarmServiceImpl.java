@@ -29,7 +29,8 @@ public class FarmServiceImpl implements FarmService {
         User owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        ValidationUtil.validateFarmInputs(farm.getSoilPH(), farm.getWaterLevel(), farm.getSeason);
+        // ✅ Corrected: call getter with parentheses
+        ValidationUtil.validateFarmInputs(farm.getSoilPH(), farm.getWaterLevel(), farm.getSeason());
 
         farm.setOwner(owner);
         return farmRepository.save(farm);
