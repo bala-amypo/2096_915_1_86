@@ -18,12 +18,16 @@ public class Suggestion {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 
+    @Column(length = 255)
     private String suggestedCrops;
 
+    @Column(length = 255)
     private String suggestedFertilizers;
 
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
@@ -31,8 +35,3 @@ public class Suggestion {
         this.createdAt = LocalDateTime.now();
     }
 }
-
-
-
-
-
