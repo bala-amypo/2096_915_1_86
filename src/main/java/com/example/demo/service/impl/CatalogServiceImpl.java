@@ -9,22 +9,19 @@ import com.example.demo.service.CatalogService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
 @Transactional
 public class CatalogServiceImpl implements CatalogService {
-
     private final CropRepository cropRepo;
     private final FertilizerRepository fertRepo;
 
     private static final Set<String> VALID_SEASONS = Set.of("Kharif", "Rabi", "Summer");
-    private static final Pattern NPK_PATTERN = Pattern.compile("^\\d+-\\d+-\\d+$");
+    private static final Pattern NPK_PATTERN = Pattern.compile("^\\d+\\-\\d+\\-\\d+$");
 
-    public CatalogServiceImpl(CropRepository cropRepo,
-                              FertilizerRepository fertRepo) {
+    public CatalogServiceImpl(CropRepository cropRepo, FertilizerRepository fertRepo) {
         this.cropRepo = cropRepo;
         this.fertRepo = fertRepo;
     }
