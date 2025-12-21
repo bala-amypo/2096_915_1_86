@@ -1,3 +1,4 @@
+
 package com.example.demo.repository;
 
 import com.example.demo.entity.Fertilizer;
@@ -8,4 +9,6 @@ import java.util.List;
 public interface FertilizerRepository extends JpaRepository<Fertilizer, Long> {
 
     List<Fertilizer> findByRecommendedForCropsIn(List<String> cropNames);
+
+    List<Fertilizer> findByCropName(String cropName);
 }

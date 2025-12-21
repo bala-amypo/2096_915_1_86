@@ -1,3 +1,4 @@
+
 package com.example.demo.repository;
 
 import com.example.demo.entity.Crop;
@@ -18,6 +19,16 @@ public interface CropRepository extends JpaRepository<Crop, Long> {
     List<Crop> findSuitableCrops(
             @Param("ph") Double ph,
             @Param("water") Double water,
+            @Param("season") String season
+    );
+
+    @Query("""
+        select c from Crop c
+        where :ph between c.suitablePHMin and c.suitablePHMax
+        and c.season = :season
+    """)
+    List<Crop> findSuitableCrops(
+            @Param("ph") Double ph,
             @Param("season") String season
     );
 }
