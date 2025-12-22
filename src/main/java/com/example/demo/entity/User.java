@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Store plain role names like "ADMIN", "USER"
+    
     @Column(nullable = false)
     private String role;
 }
