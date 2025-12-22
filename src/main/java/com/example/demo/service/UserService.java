@@ -8,5 +8,7 @@ public interface UserService {
 
     User findByEmail(String email);
 
+    boolean matches(String rawPassword, String encodedPassword);
+
     User findById(Long id);
 }
