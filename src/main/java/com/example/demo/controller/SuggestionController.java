@@ -4,8 +4,6 @@ import com.example.demo.entity.Suggestion;
 import com.example.demo.service.SuggestionService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/suggestions")
 public class SuggestionController {
@@ -17,12 +15,12 @@ public class SuggestionController {
     }
 
     @PostMapping("/{farmId}")
-    public Suggestion generate(@PathVariable Long farmId) {
-        return suggestionService.generateForFarm(farmId);
+    public Suggestion generateSuggestion(@PathVariable Long farmId) {
+        return suggestionService.generateSuggestion(farmId);
     }
 
-    @GetMapping("/farm/{farmId}")
-    public List<Suggestion> list(@PathVariable Long farmId) {
-        return suggestionService.listForFarm(farmId);
+    @GetMapping("/{id}")
+    public Suggestion getSuggestion(@PathVariable Long id) {
+        return suggestionService.getSuggestion(id);
     }
 }
