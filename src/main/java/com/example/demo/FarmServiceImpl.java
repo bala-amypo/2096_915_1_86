@@ -19,27 +19,34 @@ public class FarmServiceImpl implements FarmService {
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
 
-    public FarmServiceImpl(FarmRepository farmRepository, UserRepository userRepository) {
+    public FarmServiceImpl(FarmRepository farmRepository,
+                           UserRepository userRepository) {
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public Farm createFarm(Farm farm, String username) {
-        User owner = userRepository.findByUsername(username)
+    public Farm createFarm(Farm farm, String email) {
+
+        User owner = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // ✅ Corrected: call getter with parentheses
-        ValidationUtil.validateFarmInputs(farm.getSoilPH(), farm.getWaterLevel(), farm.getSeason());
+        ValidationUtil.validateFarmInputs(
+                farm.getSoilPH(),
+                farm.getWaterLevel(),
+                farm.getSeason()
+        );
 
         farm.setOwner(owner);
         return farmRepository.save(farm);
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(String username) {
-        User owner = userRepository.findByUsername(username)
+    public List<Farm> getFarmsByOwner(String email) {
+
+        User owner = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         return farmRepository.findByOwnerId(owner.getId());
     }
 

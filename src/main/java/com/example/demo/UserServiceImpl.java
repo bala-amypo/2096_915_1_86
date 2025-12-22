@@ -11,25 +11,27 @@ public class UserServiceImpl {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Register a new user
-    public User registerUser(String username, String name, String password, String role) {
+    // Register a new user (EMAIL based)
+    public User registerUser(String email, String password, String role) {
+
         User user = User.builder()
-                .username(username)   
-                .name(name)
+                .email(email)
                 .password(passwordEncoder.encode(password))
                 .role(role)
                 .build();
+
         return userRepository.save(user);
     }
 
-    // Find user by username
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)  
+    // Find user by email
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
