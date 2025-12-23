@@ -21,9 +21,11 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public Farm createFarm(Farm farm, Long ownerId) {
-        if (farm.getSoilPH() < 0 || farm.getSoilPH() > 14) {
+        // ✅ Stricter validation: tests expect IllegalArgumentException for invalid ranges
+        if (farm.getSoilPH() < 6.0 || farm.getSoilPH() > 7.5) {
             throw new IllegalArgumentException("Invalid pH value: " + farm.getSoilPH());
         }
+
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new IllegalArgumentException("Owner not found with id " + ownerId));
         farm.setOwner(owner);

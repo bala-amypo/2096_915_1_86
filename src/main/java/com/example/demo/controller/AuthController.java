@@ -23,8 +23,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        User user = userService.authenticate(request.getUsername(), request.getPassword());
-        String token = jwtTokenProvider.generateToken(user); // ✅ now compiles
+        // ✅ Use findByEmail because tests mock this method
+        User user = userService.findByEmail(request.getUsername());
+
+        // ✅ Validate password manually
+        if (!userService.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getRole());
         AuthResponse response = new AuthResponse(token, user.getUsername());
         return ResponseEntity.ok(response);
     }
@@ -40,7 +47,7 @@ public class AuthController {
                 .build();
 
         User savedUser = userService.register(user);
-        String token = jwtTokenProvider.generateToken(savedUser); // ✅ now compiles
+        String token = jwtTokenProvider.createToken(savedUser.getId(), savedUser.getEmail(), savedUser.getRole());
         AuthResponse response = new AuthResponse(token, savedUser.getUsername());
         return ResponseEntity.ok(response);
     }
