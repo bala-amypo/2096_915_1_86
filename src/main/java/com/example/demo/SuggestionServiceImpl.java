@@ -1,11 +1,13 @@
-package com.example.demo;
+package com.example.demo.service.impl;
 
-import com.example.demo.entity.Farm;
 import com.example.demo.entity.Suggestion;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FarmRepository;
 import com.example.demo.repository.SuggestionRepository;
 import com.example.demo.service.SuggestionService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SuggestionServiceImpl implements SuggestionService {
 
     private final FarmRepository farmRepository;
@@ -18,19 +20,15 @@ public class SuggestionServiceImpl implements SuggestionService {
     }
 
     @Override
-    public Suggestion generate(Long farmId) {
-        Farm farm = farmRepository.findById(farmId)
-                .orElseThrow(() -> new RuntimeException("Farm not found"));
-
-        Suggestion suggestion = new Suggestion();
-        suggestion.setFarm(farm);
-
-        return suggestionRepository.save(suggestion);
+    public Suggestion generateSuggestion(Long farmId) {
+        farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm not found"));
+        return suggestionRepository.save(new Suggestion());
     }
 
     @Override
     public Suggestion getSuggestion(Long id) {
         return suggestionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Suggestion not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Suggestion not found"));
     }
 }

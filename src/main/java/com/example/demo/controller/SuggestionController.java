@@ -16,11 +16,11 @@ public class SuggestionController {
 
     @PostMapping("/{farmId}")
     public Suggestion generate(@PathVariable Long farmId) {
-        return suggestionService.generate(farmId);
+        return suggestionService.generateSuggestion(farmId);
     }
 
     @GetMapping("/{id}")
-    public Suggestion getSuggestion(@PathVariable Long id) {
+    public Suggestion get(@PathVariable Long id) {
         return suggestionService.getSuggestion(id);
     }
 }
