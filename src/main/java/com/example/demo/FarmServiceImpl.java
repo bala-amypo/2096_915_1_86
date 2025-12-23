@@ -5,9 +5,11 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.FarmRepository;
 import com.example.demo.service.FarmService;
 import com.example.demo.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
@@ -20,15 +22,15 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public Farm createFarm(Farm farm, String email) {
-        User owner = userService.findByEmail(email);
+    public Farm createFarm(Farm farm, String ownerEmail) {
+        User owner = userService.findByEmail(ownerEmail);
         farm.setOwner(owner);
         return farmRepository.save(farm);
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(String email) {
-        User owner = userService.findByEmail(email);
+    public List<Farm> getFarmsByOwner(String ownerEmail) {
+        User owner = userService.findByEmail(ownerEmail);
         return farmRepository.findByOwner(owner);
     }
 
