@@ -11,7 +11,7 @@ public class AuthRequest {
     private String email;
     private String password;
 
-    // Added constructor to satisfy tests
+  
     public AuthRequest(String email, String password) {
         this.email = email;
         this.password = password;
