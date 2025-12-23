@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Farm;
 import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FarmRepository;
 import com.example.demo.service.FarmService;
 import com.example.demo.service.UserService;
@@ -22,21 +23,21 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public Farm createFarm(Farm farm, String ownerEmail) {
-        User owner = userService.findByEmail(ownerEmail);
+    public Farm createFarm(Farm farm, Long ownerId) {
+        User owner = userService.findById(ownerId);
         farm.setOwner(owner);
         return farmRepository.save(farm);
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(String ownerEmail) {
-        User owner = userService.findByEmail(ownerEmail);
+    public List<Farm> getFarmsByOwner(Long ownerId) {
+        User owner = userService.findById(ownerId);
         return farmRepository.findByOwner(owner);
     }
 
     @Override
     public Farm getFarmById(Long id) {
         return farmRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Farm not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Farm not found"));
     }
 }
