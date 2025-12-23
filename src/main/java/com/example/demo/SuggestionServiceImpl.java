@@ -42,14 +42,18 @@ public class SuggestionServiceImpl implements SuggestionService {
                 farm.getSeason()
         );
 
-        List<Fertilizer> fertilizers = catalogService.findFertilizersForCrops(
-                crops.stream().map(Crop::getName).collect(Collectors.toList())
-        );
+        List<String> cropNames = crops.stream()
+                .map(Crop::getName)
+                .collect(Collectors.toList());
+
+        List<Fertilizer> fertilizers = catalogService.findFertilizersForCrops(cropNames);
 
         Suggestion suggestion = Suggestion.builder()
                 .farm(farm)
-                .suggestedCrops(crops.stream().map(Crop::getName).collect(Collectors.joining(",")))
-                .suggestedFertilizers(fertilizers.stream().map(Fertilizer::getName).collect(Collectors.joining(",")))
+                .suggestedCrops(String.join(",", cropNames))
+                .suggestedFertilizers(fertilizers.stream()
+                        .map(Fertilizer::getName)
+                        .collect(Collectors.joining(",")))
                 .build();
 
         return suggestionRepository.save(suggestion);
