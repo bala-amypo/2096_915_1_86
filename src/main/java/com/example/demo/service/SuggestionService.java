@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.entity.Suggestion;
 
 public interface SuggestionService {
-    Suggestion generateSuggestion(Long farmId);
-    Suggestion getSuggestion(Long suggestionId);
+
+    Suggestion generate(Long farmId);
+
+    Suggestion getSuggestion(Long id);
 }
