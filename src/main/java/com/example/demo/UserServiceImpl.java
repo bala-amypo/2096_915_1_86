@@ -2,11 +2,12 @@ package com.example.demo;
 
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {  
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -17,21 +18,26 @@ public class UserServiceImpl {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Register a new user (EMAIL based)
-    public User registerUser(String email, String password, String role) {
-
-        User user = User.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .role(role)
-                .build();
-
+    @Override
+    public User register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    // Find user by email
+    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
