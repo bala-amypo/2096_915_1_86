@@ -1,3 +1,4 @@
+
 package com.example.demo.dto;
 
 import lombok.Getter;
@@ -6,14 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
-@NoArgsConstructor // ensures deserialization works
+@NoArgsConstructor
 public class AuthRequest {
-    private String email;
+    private String username;   
     private String password;
 
-  
-    public AuthRequest(String email, String password) {
-        this.email = email;
+    public AuthRequest(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 }
