@@ -1,37 +1,34 @@
-package com.example.demo.service.impl;
+package com.example.demo;
 
 import com.example.demo.entity.Farm;
 import com.example.demo.entity.User;
 import com.example.demo.repository.FarmRepository;
 import com.example.demo.service.FarmService;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class FarmServiceImpl implements FarmService {
 
-    private final UserService userService;
     private final FarmRepository farmRepository;
+    private final UserService userService;
 
-    @Autowired
-    public FarmServiceImpl(UserService userService, FarmRepository farmRepository) {
-        this.userService = userService;
+    public FarmServiceImpl(FarmRepository farmRepository,
+                           UserService userService) {
         this.farmRepository = farmRepository;
+        this.userService = userService;
     }
 
     @Override
-    public Farm createFarm(Farm farm, String ownerEmail) {
-        User owner = userService.findByEmail(ownerEmail);
+    public Farm createFarm(Farm farm, String email) {
+        User owner = userService.findByEmail(email);
         farm.setOwner(owner);
         return farmRepository.save(farm);
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(String ownerEmail) {
-        User owner = userService.findByEmail(ownerEmail);
+    public List<Farm> getFarmsByOwner(String email) {
+        User owner = userService.findByEmail(email);
         return farmRepository.findByOwner(owner);
     }
 
