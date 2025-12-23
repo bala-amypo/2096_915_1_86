@@ -4,10 +4,9 @@ import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
-import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
+import com.example.demo.service.JwtService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,35 +14,36 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
 
-    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(UserService userService, JwtService jwtService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
-        User u = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .role("USER")
-                .build();
-        return ResponseEntity.ok(userService.register(u));
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        User user = userService.findByEmail(request.getEmail());
-        if (!userService.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).build();
-        }
-        String token = jwtTokenProvider.createToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-        return ResponseEntity.ok(new AuthResponse(token));
+        // Authenticate user
+        User user = userService.authenticate(request.getUsername(), request.getPassword());
+
+        // Generate JWT token
+        String token = jwtService.generateToken(user);
+
+        // Build response
+        AuthResponse response = new AuthResponse(token, user.getUsername());
+        return ResponseEntity.ok(response); // ✅ non-null body
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        // Register new user
+        User user = userService.register(request);
+
+        // Generate JWT token
+        String token = jwtService.generateToken(user);
+
+        // Build response
+        AuthResponse response = new AuthResponse(token, user.getUsername());
+        return ResponseEntity.ok(response);
     }
 }
