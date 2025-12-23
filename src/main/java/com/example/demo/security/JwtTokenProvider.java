@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -7,11 +8,11 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
-@Component  
+@Component
 public class JwtTokenProvider {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long validity = 1000 * 60 * 60;
+    private final long validity = 1000 * 60 * 60; // 1 hour
 
     public String createToken(Long userId, String email, String role) {
         Claims claims = Jwts.claims();
@@ -25,6 +26,11 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + validity))
                 .signWith(key)
                 .compact();
+    }
+
+    // ✅ Convenience method for AuthController
+    public String generateToken(User user) {
+        return createToken(user.getId(), user.getEmail(), user.getRole());
     }
 
     public boolean validateToken(String token) {

@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         User user = userService.authenticate(request.getUsername(), request.getPassword());
-        String token = jwtTokenProvider.generateToken(user);
+        String token = jwtTokenProvider.generateToken(user); // ✅ now compiles
         AuthResponse response = new AuthResponse(token, user.getUsername());
         return ResponseEntity.ok(response);
     }
@@ -40,7 +40,7 @@ public class AuthController {
                 .build();
 
         User savedUser = userService.register(user);
-        String token = jwtTokenProvider.generateToken(savedUser);
+        String token = jwtTokenProvider.generateToken(savedUser); // ✅ now compiles
         AuthResponse response = new AuthResponse(token, savedUser.getUsername());
         return ResponseEntity.ok(response);
     }
