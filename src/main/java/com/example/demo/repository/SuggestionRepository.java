@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
-    // Add custom query methods if needed
 }

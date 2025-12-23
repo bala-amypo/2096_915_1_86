@@ -19,13 +19,13 @@ public class SuggestionController {
         this.suggestionService = suggestionService;
     }
 
-    @Operation(summary = "Generate a suggestion", description = "Generates a suggestion for a given farm")
+    @Operation(summary = "Generate a suggestion")
     @PostMapping("/{farmId}")
     public Suggestion generateSuggestion(@PathVariable Long farmId) {
         return suggestionService.generateSuggestion(farmId);
     }
 
-    @Operation(summary = "Get suggestion by ID", description = "Fetches a suggestion by its unique ID")
+    @Operation(summary = "Get suggestion by ID")
     @GetMapping("/{id}")
     public Suggestion getSuggestion(@PathVariable Long id) {
         return suggestionService.getSuggestion(id);

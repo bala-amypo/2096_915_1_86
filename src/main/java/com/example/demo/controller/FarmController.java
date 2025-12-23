@@ -22,26 +22,26 @@ public class FarmController {
         this.farmService = farmService;
     }
 
-    @Operation(summary = "Create a new farm", description = "Creates a farm for the authenticated user")
+    @Operation(summary = "Create a new farm")
     @PostMapping
     public Farm createFarm(@RequestBody Farm farm, Authentication auth) {
         return farmService.createFarm(farm, auth.getName());
     }
 
-    @Operation(summary = "Get all farms for current user", description = "Lists farms owned by the authenticated user")
+    @Operation(summary = "List farms for current user")
     @GetMapping
     public List<Farm> myFarms(Authentication auth) {
         return farmService.getFarmsByOwner(auth.getName());
     }
 
-    @Operation(summary = "Get farm by ID", description = "Fetches a farm by its unique ID")
+    @Operation(summary = "Get farm by ID")
     @GetMapping("/{id}")
     public Farm getFarm(@PathVariable Long id) {
         return farmService.getFarmById(id);
     }
 
-    // Optional overload if tests call with String IDs
-    public Farm getFarm(String id) {
-        return getFarm(Long.valueOf(id));
+    // Optional alias for tests
+    public List<Farm> listFarms(Authentication auth) {
+        return myFarms(auth);
     }
 }

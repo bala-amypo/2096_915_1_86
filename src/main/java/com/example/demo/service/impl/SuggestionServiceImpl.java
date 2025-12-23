@@ -23,7 +23,6 @@ public class SuggestionServiceImpl implements SuggestionService {
 
     @Override
     public Suggestion generateSuggestion(Long farmId) {
-        // You can use farmRepository to validate farmId if needed
         return suggestionRepository.save(new Suggestion());
     }
 
