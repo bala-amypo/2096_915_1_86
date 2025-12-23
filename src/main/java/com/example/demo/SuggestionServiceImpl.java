@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import com.example.demo.entity.Suggestion;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -28,7 +28,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
     @Override
     public Suggestion generateSuggestion(Long farmId) {
-        // Stubbed or implemented elsewhere
+        // Stub or real implementation goes here
         return null;
     }
 }

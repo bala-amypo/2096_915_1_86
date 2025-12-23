@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
-    // Override the default findById to return a List instead of Optional
-    List<Suggestion> findById(Long id);
+   
+    List<Suggestion> findAllByIdCustom(Long id);
 }
