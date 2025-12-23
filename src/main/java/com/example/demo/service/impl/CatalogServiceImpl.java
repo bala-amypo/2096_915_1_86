@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Crop;
 import com.example.demo.entity.Fertilizer;

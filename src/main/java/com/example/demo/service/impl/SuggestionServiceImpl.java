@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Suggestion;
 import com.example.demo.exception.ResourceNotFoundException;
