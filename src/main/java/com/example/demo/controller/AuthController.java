@@ -23,27 +23,24 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        // Authenticate user
         User user = userService.authenticate(request.getUsername(), request.getPassword());
-
-        // Generate JWT token
         String token = jwtService.generateToken(user);
-
-        // Build response
         AuthResponse response = new AuthResponse(token, user.getUsername());
-        return ResponseEntity.ok(response); // ✅ non-null body
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        // Register new user
-        User user = userService.register(request);
+        // ✅ Convert RegisterRequest → User
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .email(request.getEmail())
+                .build();
 
-        // Generate JWT token
-        String token = jwtService.generateToken(user);
-
-        // Build response
-        AuthResponse response = new AuthResponse(token, user.getUsername());
+        User savedUser = userService.register(user);
+        String token = jwtService.generateToken(savedUser);
+        AuthResponse response = new AuthResponse(token, savedUser.getUsername());
         return ResponseEntity.ok(response);
     }
 }
