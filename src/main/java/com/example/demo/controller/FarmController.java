@@ -17,7 +17,6 @@ public class FarmController {
 
     private final FarmService farmService;
 
-    // Spring will inject the FarmServiceImpl bean here
     @Autowired
     public FarmController(FarmService farmService) {
         this.farmService = farmService;
