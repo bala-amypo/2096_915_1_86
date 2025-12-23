@@ -44,7 +44,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<Crop> findSuitableCrops(double ph, double water, String season) {
-        // Assuming repository has a custom query for ph + season
+        
         return cropRepository.findSuitableCrops(ph, season);
     }
 

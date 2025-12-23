@@ -51,6 +51,6 @@ public class SuggestionServiceImpl implements SuggestionService {
         if (suggestions.isEmpty()) {
             throw new ResourceNotFoundException("Suggestion not found");
         }
-        return suggestions.get(0); // ✅ matches test calling .get(0)
+        return suggestions.get(0); 
     }
 }
