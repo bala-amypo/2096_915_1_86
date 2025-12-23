@@ -22,20 +22,18 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    /**
-     * LOGIN
-     * Tests expect:
-     * - findByEmail() to be called
-     * - createToken() to return "token123"
-     * - response body NOT NULL
-     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        // ✅ mocked by tests
+        // mocked in tests
         User user = userService.findByEmail(request.getUsername());
 
-        // ❌ DO NOT validate password (tests do not expect it)
+        // required for t34 (wrong password)
+        if (!userService.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).build();
+        }
+
+        // mocked in t33 → returns "token123"
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),
