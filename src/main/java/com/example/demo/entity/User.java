@@ -17,11 +17,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;   // ✅ required for login
+    private String username;   // required for login
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    
+    private String name;
+
+    private String role;
 }
