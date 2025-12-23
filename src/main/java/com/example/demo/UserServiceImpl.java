@@ -46,4 +46,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("User not found with id " + id));
     }
+
+    // ✅ Added authenticate method to satisfy AuthController
+    @Override
+    public User authenticate(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!matches(password, user.getPassword())) {
+            throw new BadRequestException("Invalid credentials");
+        }
+        return user;
+    }
 }
