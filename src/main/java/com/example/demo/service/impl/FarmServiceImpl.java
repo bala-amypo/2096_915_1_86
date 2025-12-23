@@ -2,7 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Farm;
 import com.example.demo.repository.FarmRepository;
-import org.springframework.security.core.Authentication;
+import com.example.demo.service.FarmService; 
+import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,12 @@ import java.util.List;
 @Service
 public class FarmServiceImpl implements FarmService {
 
+    private final UserService userService;
     private final FarmRepository farmRepository;
 
-    public FarmServiceImpl(FarmRepository farmRepository) {
+    // Constructor that matches tests expecting UserService
+    public FarmServiceImpl(UserService userService, FarmRepository farmRepository) {
+        this.userService = userService;
         this.farmRepository = farmRepository;
     }
 
