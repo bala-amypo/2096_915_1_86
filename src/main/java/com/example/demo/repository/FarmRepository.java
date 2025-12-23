@@ -8,3 +8,4 @@ import java.util.List;
 public interface FarmRepository extends JpaRepository<Farm, Long> {
     List<Farm> findByOwner(User owner);
 }
+
