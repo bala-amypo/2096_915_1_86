@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        // check duplicate email
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
@@ -47,13 +46,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BadRequestException("User not found with id " + id));
     }
 
-    // ✅ Added authenticate method to satisfy AuthController
     @Override
     public User authenticate(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         if (!matches(password, user.getPassword())) {
-            throw new BadRequestException("Invalid credentials");
+            throw new IllegalArgumentException("Invalid credentials"); // matches test expectation
         }
         return user;
     }
