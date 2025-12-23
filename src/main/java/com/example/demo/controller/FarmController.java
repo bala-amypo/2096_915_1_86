@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Farm;
 import com.example.demo.service.FarmService;
-import com.example.demo.service.UserService; // added for overloaded constructor
+import com.example.demo.service.UserService;
+import com.example.demo.service.impl.FarmServiceImpl; // concrete implementation
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
@@ -24,8 +25,8 @@ public class FarmController {
 
     // Overloaded constructor to satisfy tests expecting UserService
     public FarmController(UserService userService) {
-        // Adapt: wrap or delegate as needed
-        this.farmService = new FarmService(userService); // assumes FarmService has such a constructor
+        // delegate to a concrete FarmService implementation that uses UserService
+        this.farmService = new FarmServiceImpl(userService);
     }
 
     @Operation(summary = "Create a new farm", description = "Creates a farm for the authenticated user")

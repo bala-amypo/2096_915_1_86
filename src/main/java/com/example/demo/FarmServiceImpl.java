@@ -1,58 +1,35 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import com.example.demo.entity.Farm;
-import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FarmRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.FarmService;
-import com.example.demo.util.ValidationUtil;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
-    private final UserRepository userRepository;
 
-    public FarmServiceImpl(FarmRepository farmRepository,
-                           UserRepository userRepository) {
+    public FarmServiceImpl(FarmRepository farmRepository) {
         this.farmRepository = farmRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
-    public Farm createFarm(Farm farm, String email) {
-
-        User owner = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        ValidationUtil.validateFarmInputs(
-                farm.getSoilPH(),
-                farm.getWaterLevel(),
-                farm.getSeason()
-        );
-
-        farm.setOwner(owner);
+    public Farm createFarm(Farm farm, String ownerEmail) {
+        farm.setOwner(ownerEmail);
         return farmRepository.save(farm);
     }
 
     @Override
-    public List<Farm> getFarmsByOwner(String email) {
-
-        User owner = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return farmRepository.findByOwnerId(owner.getId());
+    public List<Farm> getFarmsByOwner(String ownerEmail) {
+        return farmRepository.findByOwner(ownerEmail);
     }
 
     @Override
-    public Farm getFarmById(Long farmId) {
-        return farmRepository.findById(farmId)
-                .orElseThrow(() -> new ResourceNotFoundException("Farm not found"));
+    public Farm getFarmById(Long id) {
+        return farmRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Farm not found"));
     }
 }
