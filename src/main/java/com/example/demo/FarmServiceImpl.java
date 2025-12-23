@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Farm;
+import com.example.demo.entity.User;
 import com.example.demo.repository.FarmRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,27 +12,29 @@ import java.util.List;
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
+    private final UserRepository userRepository;
 
-    public FarmServiceImpl(FarmRepository farmRepository) {
+    public FarmServiceImpl(FarmRepository farmRepository, UserRepository userRepository) {
         this.farmRepository = farmRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Farm createFarm(Farm farm, Long ownerId) {
-        // ✅ Validate soil pH
         if (farm.getSoilPH() < 0 || farm.getSoilPH() > 14) {
             throw new IllegalArgumentException("Invalid pH value: " + farm.getSoilPH());
         }
-
-        // ✅ Set ownerId
-        farm.setOwnerId(ownerId);
-
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new IllegalArgumentException("Owner not found with id " + ownerId));
+        farm.setOwner(owner);
         return farmRepository.save(farm);
     }
 
     @Override
     public List<Farm> getFarmsByOwner(Long ownerId) {
-        return farmRepository.findByOwnerId(ownerId);
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new IllegalArgumentException("Owner not found with id " + ownerId));
+        return farmRepository.findByOwner(owner);
     }
 
     @Override
