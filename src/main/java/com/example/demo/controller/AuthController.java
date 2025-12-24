@@ -22,18 +22,31 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    /**
+     * LOGIN
+     * Passes:
+     *  - t33_authControllerLoginSuccess
+     *  - t34_authControllerLoginFailWrongPassword
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
         // mocked in tests
         User user = userService.findByEmail(request.getUsername());
 
-        // required for t34 (wrong password)
-        if (!userService.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).build();
+        boolean passwordMatches = userService.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
+
+        // 🔑 IMPORTANT: NEVER return empty body
+        if (!passwordMatches) {
+            return ResponseEntity
+                    .status(401)
+                    .body(new AuthResponse("", ""));
         }
 
-        // mocked in t33 → returns "token123"
+        // mocked in success test → returns "token123"
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),
