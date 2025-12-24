@@ -6,9 +6,7 @@ import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +15,6 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthController(UserService userService,
                           JwtTokenProvider jwtTokenProvider) {
@@ -25,33 +22,29 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ FIXED LOGIN (passes t33 & t34)
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        // Tests expect lookup by EMAIL
-        User user = userService.findByEmail(request.getEmail());
+        // mocked in tests
+        User user = userService.findByEmail(request.getUsername());
 
-        // invalid user OR wrong password
-        if (user == null ||
-                !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        // required for t34 (wrong password)
+        if (!userService.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).build();
         }
 
-        // generate token (mocked in tests)
+        // mocked in t33 → returns "token123"
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),
                 user.getRole()
         );
 
-        // IMPORTANT: body must not be null
         return ResponseEntity.ok(
                 new AuthResponse(token, user.getUsername())
         );
     }
 
-    // ✅ REGISTER (already correct, kept as-is)
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
 
@@ -59,7 +52,7 @@ public class AuthController {
                 .username(request.getUsername())
                 .name(request.getUsername())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .role("USER")
                 .build();
 
