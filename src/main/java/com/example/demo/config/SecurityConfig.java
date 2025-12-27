@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,25 +41,16 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Swagger + auth endpoints open
                 .requestMatchers(
-                    "/swagger-ui/**",
+           `         "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/v3/api-docs.yaml",
-                    "/swagger-ui.html",
-                    "/auth/**"
+                    "/swagger-ui.html"
                 ).permitAll()
-
-                // Farms + suggestions → USER or ADMIN
-                .requestMatchers("/farms/**", "/suggestions/**").hasAnyRole("USER", "ADMIN")
-
-                // Catalog → ADMIN only
-                .requestMatchers("/catalog/**").hasRole("ADMIN")
-
-                // Everything else → authenticated
+                .requestMatchers("/auth/**", "/public/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(); // Basic Auth enabled
+            .httpBasic();
 
         return http.build();
     }
