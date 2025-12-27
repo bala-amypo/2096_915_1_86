@@ -41,16 +41,25 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                // Swagger and auth endpoints open
                 .requestMatchers(
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/v3/api-docs.yaml",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "/auth/**"
                 ).permitAll()
-                .requestMatchers("/auth/**", "/public/**").permitAll()
+
+                // Farms and suggestions → USER or ADMIN
+                .requestMatchers("/farms/**", "/suggestions/**").hasAnyRole("USER", "ADMIN")
+
+                // Catalog → ADMIN only
+                .requestMatchers("/catalog/**").hasRole("ADMIN")
+
+                // Everything else → authenticated
                 .anyRequest().authenticated()
             )
-            .httpBasic();
+            .httpBasic(); // temporary Basic Auth
 
         return http.build();
     }
