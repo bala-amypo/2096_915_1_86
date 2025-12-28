@@ -24,10 +24,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-
         User user = userService.findByEmail(request.getUsername());
 
-        // 🔑 Token decides success/failure (matches test behavior)
+        // Token decides success/failure (matches test behavior)
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),
@@ -49,7 +48,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-
         User user = User.builder()
                 .username(request.getUsername())
                 .name(request.getUsername())
