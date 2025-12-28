@@ -1,7 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,13 +20,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Use DB-backed users instead of in-memory
+    // ✅ DB-backed UserDetailsService
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+            // Map your JPA entity to Spring Security's UserDetails
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.getUsername())
                     .password(user.getPassword())
@@ -49,7 +50,9 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**", "/public/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(); // you can replace with JWT filter later
+            // 🚫 Disable browser popup for Basic Auth
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
 
         return http.build();
     }
