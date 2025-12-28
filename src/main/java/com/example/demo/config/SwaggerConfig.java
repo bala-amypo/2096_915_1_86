@@ -20,6 +20,6 @@ public class SwaggerConfig {
    
     @Bean
     public Object api() {
-        return new Object(); // dummy bean to satisfy test
+        return new Object(); 
     }
 }
