@@ -3,13 +3,9 @@ package com.example.demo.security;
 import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Collections;
 import java.util.Date;
 
 @Component
@@ -59,18 +55,6 @@ public class JwtTokenProvider {
 
     public String getRole(String token) {
         return (String) getClaims(token).get("role");
-    }
-
-    // 🔑 New method: convert token into Authentication
-    public Authentication getAuthentication(String token) {
-        String email = getEmail(token);
-        String role = getRole(token);
-
-        return new UsernamePasswordAuthenticationToken(
-                email,
-                null,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-        );
     }
 
     private Claims getClaims(String token) {
