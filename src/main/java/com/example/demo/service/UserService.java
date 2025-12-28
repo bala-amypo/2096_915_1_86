@@ -12,6 +12,6 @@ public interface UserService {
 
     User findById(Long id);
 
-    // ✅ Added to satisfy AuthController
+    
     User authenticate(String username, String password);
 }

@@ -28,7 +28,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ Convenience method for AuthController
+    
     public String generateToken(User user) {
         return createToken(user.getId(), user.getEmail(), user.getRole());
     }

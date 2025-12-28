@@ -21,7 +21,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public Farm createFarm(Farm farm, Long ownerId) {
-        // ✅ Stricter validation: tests expect IllegalArgumentException for invalid ranges
+       
         if (farm.getSoilPH() < 6.0 || farm.getSoilPH() > 7.5) {
             throw new IllegalArgumentException("Invalid pH value: " + farm.getSoilPH());
         }
