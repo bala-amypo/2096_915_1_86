@@ -12,7 +12,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long validity = 1000 * 60 * 60; // 1 hour
+    private final long validity = 1000 * 60 * 60;
 
     public String createToken(Long userId, String email, String role) {
         Claims claims = Jwts.claims();

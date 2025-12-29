@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         if (!matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials"); // matches test expectation
+            throw new IllegalArgumentException("Invalid credentials");
         }
         return user;
     }

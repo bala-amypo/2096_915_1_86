@@ -26,7 +26,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         User user = userService.findByEmail(request.getUsername());
 
-        // Token decides success/failure (matches test behavior)
+       
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),

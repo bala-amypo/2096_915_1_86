@@ -47,7 +47,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
     @Override
     public Suggestion getSuggestion(Long id) {
-        List<Suggestion> suggestions = suggestionRepository.findByFarmId(id); // ✅ returns List
+        List<Suggestion> suggestions = suggestionRepository.findByFarmId(id); 
         if (suggestions.isEmpty()) {
             throw new ResourceNotFoundException("Suggestion not found");
         }
