@@ -33,14 +33,14 @@ public class AuthController {
                 user.getRole()
         );
 
-        // t34: createToken NOT mocked → null → 401
+       
         if (token == null) {
             return ResponseEntity
                     .status(401)
                     .body(new AuthResponse("", ""));
         }
 
-        // t33: createToken mocked → "token123"
+       
         return ResponseEntity.ok(
                 new AuthResponse(token, user.getUsername())
         );
